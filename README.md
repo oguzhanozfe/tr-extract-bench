@@ -16,7 +16,7 @@ python -m trbench demo        # Python 3.10+, no installs, no API key
 
 `demo` generates four synthetic documents, extracts their fields, scores each one and then
 rebuilds the leaderboard from the committed outputs. It picks a model by itself: an
-API key in your environment (`GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`),
+API key in your environment (`GEMINI_API_KEY`, `GROQ_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`),
 otherwise a local Ollama chat model, otherwise a replay of the recorded `qwen3.5:4b` outputs,
 which it labels `mode: replay`.
 
@@ -101,21 +101,28 @@ Measured on 2026-11-17. Every number below is generated from `results/raw/*.json
 What the recorded runs show:
 
 - **The baseline tier is at ceiling.** On `clean`, `ocr` (labels only), `ascii`, `mixed`
-  and `reordered`, both Gemini flash-lite lanes score 100.0 F1 and `qwen3.5:9b` 99.5 to
-  99.8 (`qwen3.5:4b`: 95.1 to 98.0). For label-value documents, label noise, stripped diacritics and shuffled layout
+  and `reordered`, the Gemini flash-lite, Groq and RTX 3090 lanes score 100.0 F1 and
+  `qwen3.5:9b` 99.5 to 99.8 (`qwen3.5:4b`: 95.1 to 98.0). For label-value documents, label noise, stripped diacritics and shuffled layout
   barely matter.
 - **OCR inside values is what separates models.** On `ocr_values` the full-set lanes score
-  95.3 (`gemini-3.1-flash-lite`), 93.2 (`gemini-3.5-flash-lite`), 90.1 (`qwen3.5:9b`) and
-  87.9 (`qwen3.5:4b`). Most misses copy the lookalike letter into an ID (`JFCZ026...`,
-  `TR34...S855086`) instead of correcting it.
+  95.3 (`gemini-3.1-flash-lite`), 93.6 (Qwen3.8-27B community fine-tune on an RTX 3090),
+  93.2 (`gemini-3.5-flash-lite`), 90.1 (`qwen3.5:9b`), 87.9 (`qwen3.5:4b`) and 84.5
+  (`gpt-oss-120b` on Groq). Most misses copy the lookalike letter into an ID (`JFCZ026...`,
+  `TR34...S855086`) instead of correcting it; `gpt-oss-120b` more often returns null for a
+  garbled value (33 of its 61 misses).
+- **Same model, two hosts.** On the 156 tasks both completed, Groq's `qwen/qwen3.8-27b`
+  scores 98.7 F1 and the community fine-tune on a local RTX 3090 98.8, with the same
+  OCR misses on the shared tasks. This is a fine-tune, not the official weights, so it is not
+  a pure host comparison.
 - **Turkish number format trips the small local model.** `qwen3.5:4b` reads balances like
   `89.625,39` as `89.62539`, so its bank-statement F1 is 85.1 while every other lane scores
   98 or more.
-- **Almost no invented values.** `qwen3.5:4b` filled one absent field across 224 tasks;
-  no other lane filled any. JSON validity was
+- **Almost no invented values.** `qwen3.5:4b` filled one absent field across 224 tasks, and
+  Groq's `qwen3.8-27b` once wrote `total_debits` under the misspelled key `total_debts`
+  (scored as an extra key and a miss); no other lane emitted anything outside the truth. JSON validity was
   99.1% or higher without any JSON mode, and the distractor lines barely moved any lane.
-- **Latency** (median per document): flash-lite lanes 1.3 to 1.9 s over the network;
-  `qwen3.5:9b` 8.3 s and `qwen3.5:4b` 3.0 s on a shared Mac.
+- **Latency** (median per document): Groq 0.8 to 1.1 s and flash-lite 1.3 to 1.9 s over the
+  network; the RTX 3090 lane 3.1 s; `qwen3.5:9b` 8.3 s and `qwen3.5:4b` 3.0 s on a shared Mac.
 
 Lanes and why some are partial:
 
@@ -129,6 +136,14 @@ Lanes and why some are partial:
   of its 28 tasks. Its 100.0 covers mostly baseline-tier tasks and is not comparable with
   the full-set lanes. A lane marked partial ran out of quota or
   time; its scores cover only the tasks it completed.
+- Groq lanes use the free tier with one request every 12 s to stay under its per-minute
+  token limit. `openai/gpt-oss-120b` completed all 224 tasks. `qwen/qwen3.8-27b` hit the
+  free tier's daily limit (repeated HTTP 429) after 156 tasks and was stopped there, so it is
+  partial; its shared-sample score is complete.
+- The RTX 3090 lane is `qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp`, a community
+  fine-tune of Qwen3.8-27B, served by LM Studio on a local RTX 3090 (one request at a time).
+  The official Qwen3.8-27B weights were not available on that machine; if they are added
+  later they get their own row.
 - DeepSeek has an adapter, but the account had a zero balance (HTTP 402), so it was not run.
 - Requests that failed at the transport or API level (timeouts, HTTP 503) are retried and
   listed as unscored API errors. They are not counted as model mistakes.
@@ -141,8 +156,11 @@ Base document 00 of each type in every variant. Every lane ran this sample first
 | Lane | Tasks scored | F1 | Precision | Recall | JSON valid % | Hallucinated % | Median latency s | Unscored API errors |
 |---|---|---|---|---|---|---|---|---|
 | gemini-3.1-flash-lite | 28/28 | 99.6 | 99.6 | 99.6 | 100.0 | 0.0 | 1.9 | 0 |
+| groq-qwen-qwen3.8-27b | 28/28 | 99.6 | 99.6 | 99.6 | 100.0 | 0.0 | 0.8 | 0 |
+| lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp | 28/28 | 99.6 | 99.6 | 99.6 | 100.0 | 0.0 | 5.8 | 0 |
 | ollama-qwen3.5-9b | 28/28 | 99.6 | 99.6 | 99.6 | 100.0 | 0.0 | 17.6 | 0 |
 | gemini-3.5-flash-lite | 28/28 | 99.2 | 99.2 | 99.2 | 100.0 | 0.0 | 1.7 | 0 |
+| groq-openai-gpt-oss-120b | 28/28 | 98.6 | 99.2 | 98.1 | 100.0 | 0.0 | 0.9 | 0 |
 | gemma-4-31b-it | 21/28 (partial) | 100.0 | 100.0 | 100.0 | 100.0 | 0.0 | 56.9 | 2 |
 | ollama-qwen3.5-4b | 28/28 | 91.5 | 91.8 | 91.1 | 100.0 | 0.0 | 2.9 | 0 |
 
@@ -151,18 +169,33 @@ Base document 00 of each type in every variant. Every lane ran this sample first
 | Lane | Tasks scored | F1 | Precision | Recall | JSON valid % | Hallucinated % | Median latency s | Unscored API errors |
 |---|---|---|---|---|---|---|---|---|
 | gemini-3.1-flash-lite | 224/224 | 99.3 | 99.3 | 99.3 | 100.0 | 0.0 | 1.9 | 0 |
+| lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp | 224/224 | 99.1 | 99.1 | 99.1 | 100.0 | 0.0 | 3.1 | 0 |
 | gemini-3.5-flash-lite | 224/224 | 99.0 | 99.1 | 98.9 | 100.0 | 0.0 | 1.3 | 0 |
+| groq-qwen-qwen3.8-27b | 156/224 (partial) | 98.7 | 98.7 | 98.7 | 100.0 | 0.1 | 0.8 | 0 |
 | ollama-qwen3.5-9b | 224/224 | 98.4 | 99.0 | 97.9 | 99.6 | 0.0 | 8.3 | 0 |
+| groq-openai-gpt-oss-120b | 224/224 | 97.8 | 98.6 | 97.1 | 100.0 | 0.0 | 1.1 | 0 |
 | ollama-qwen3.5-4b | 224/224 | 95.1 | 95.8 | 94.5 | 99.1 | 0.0 | 3.0 | 0 |
 | gemma-4-31b-it | 21/224 (partial) | 100.0 | 100.0 | 100.0 | 100.0 | 0.0 | 56.9 | 2 |
+
+### Same model, two hosts: Qwen3.8-27B: Groq API vs a community fine-tune on a local RTX 3090
+
+Compared only on the 156 tasks both lanes scored.
+
+| Lane | Tasks scored | F1 | Precision | Recall | JSON valid % | Hallucinated % | Median latency s | Unscored API errors |
+|---|---|---|---|---|---|---|---|---|
+| groq-qwen-qwen3.8-27b | 156/156 | 98.7 | 98.7 | 98.7 | 100.0 | 0.1 | 0.8 | 0 |
+| lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp | 156/156 | 98.8 | 98.8 | 98.8 | 100.0 | 0.0 | 3.5 | 0 |
 
 ### F1 by document type
 
 | Lane | invoice | bank_statement | kap_disclosure | cargo_notice |
 |---|---|---|---|---|
 | gemini-3.1-flash-lite | 98.9 | 99.2 | 100.0 | 99.6 |
+| lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp | 98.1 | 99.4 | 99.7 | 99.6 |
 | gemini-3.5-flash-lite | 98.3 | 99.2 | 99.7 | 99.3 |
+| groq-qwen-qwen3.8-27b | 98.1 | 99.2 | 99.5 | 98.4 |
 | ollama-qwen3.5-9b | 98.1 | 98.2 | 97.9 | 99.4 |
+| groq-openai-gpt-oss-120b | 96.8 | 97.7 | 98.5 | 99.0 |
 | ollama-qwen3.5-4b | 98.3 | 85.1 | 97.4 | 99.4 |
 | gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 |
 
@@ -171,14 +204,17 @@ Base document 00 of each type in every variant. Every lane ran this sample first
 | Lane | clean | ocr | ascii | mixed | reordered | ocr_values | distractors |
 |---|---|---|---|---|---|---|---|
 | gemini-3.1-flash-lite | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 95.3 | 100.0 |
+| lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 93.6 | 100.0 |
 | gemini-3.5-flash-lite | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 93.2 | 99.7 |
+| groq-qwen-qwen3.8-27b | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 91.5 | 99.5 |
 | ollama-qwen3.5-9b | 99.8 | 99.8 | 99.8 | 99.8 | 99.5 | 90.1 | 99.8 |
+| groq-openai-gpt-oss-120b | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 84.5 | 99.7 |
 | ollama-qwen3.5-4b | 98.0 | 95.5 | 95.4 | 97.0 | 95.1 | 87.9 | 96.8 |
 | gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | – | – |
 
 `–`: fewer than 4 scored tasks in that bucket.
 
-Settings: `gemini-3.1-flash-lite` temperature=0, thinkingLevel=low; `gemini-3.5-flash-lite` temperature=0, thinkingLevel=low; `ollama-qwen3.5-9b` temperature=0, think=false, digest=56671c2ab938; `ollama-qwen3.5-4b` temperature=0, think=false, digest=2a654d98e6fb; `gemma-4-31b-it` temperature=0, thought parts dropped
+Settings: `gemini-3.1-flash-lite` temperature=0, thinkingLevel=low; `lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp` temperature=0, community fine-tune of Qwen3.8-27B, local RTX 3090 via LM Studio; `gemini-3.5-flash-lite` temperature=0, thinkingLevel=low; `groq-qwen-qwen3.8-27b` temperature=0, reasoning_effort=none; `ollama-qwen3.5-9b` temperature=0, think=false, digest=56671c2ab938; `groq-openai-gpt-oss-120b` temperature=0, reasoning_effort=low; `ollama-qwen3.5-4b` temperature=0, think=false, digest=2a654d98e6fb; `gemma-4-31b-it` temperature=0, thought parts dropped
 <!-- LEADERBOARD:END -->
 
 ## How to run
@@ -206,10 +242,15 @@ Lanes are discovered automatically:
   embedding models are skipped because they cannot chat
 - Gemini API models if `GEMINI_API_KEY` is set (`TRB_GEMINI_MODELS`, comma-separated, default
   `gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemma-4-31b-it`)
+- Groq if `GROQ_API_KEY` is set (`TRB_GROQ_MODELS`, default
+  `qwen/qwen3.8-27b,openai/gpt-oss-120b`)
+- an OpenAI-compatible LM Studio server if `LMSTUDIO_URL` is set (for example
+  `http://<host>:1234/v1`; `TRB_LMSTUDIO_MODELS` limits which models run)
 - DeepSeek if `DEEPSEEK_API_KEY` is set (`TRB_DEEPSEEK_MODEL`, default `deepseek-flash`)
 - OpenAI if `OPENAI_API_KEY` is set, Anthropic if `ANTHROPIC_API_KEY` is set
 
-Lanes run at temperature 0. Thinking is off for Ollama and set to `low` for Gemini models;
+Lanes run at temperature 0. Thinking is off for Ollama and Groq `qwen3.8-27b`, `low` for
+Gemini models and Groq `gpt-oss-120b`, and left at the LM Studio default for the RTX 3090 lane;
 `gemma-4-31b-it` accepts no thinking setting and reasons by default (its thought parts are
 dropped before scoring). The OpenAI lane uses default settings. The exact settings (and the Ollama model digest) are stored in every result row.
 

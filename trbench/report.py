@@ -8,6 +8,10 @@ from .docs import DOC_TYPES, VARIANTS
 from . import page
 from .score import aggregate, score_item
 
+# Same base model on two hosts, compared on the tasks both lanes scored.
+PAIRS = [("groq-qwen-qwen3.8-27b", "lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp",
+          "Qwen3.8-27B: Groq API vs a community fine-tune on a local RTX 3090")]
+
 START, END = "<!-- LEADERBOARD:START -->", "<!-- LEADERBOARD:END -->"
 
 
@@ -28,7 +32,7 @@ def build(dataset, raw_dir):
         for row in rows:
             doc = by_id[row["id"]]
             s = score_item(doc["doc_type"], doc["gold"], row["output"] or "")
-            s.update(doc_type=doc["doc_type"], variant=doc["variant"], latency=row["latency_s"],
+            s.update(id=row["id"], doc_type=doc["doc_type"], variant=doc["variant"], latency=row["latency_s"],
                      sample=int(row["id"].split("-")[-2]) == 0,
                      error=row["error"])
             items.append(s)
@@ -62,6 +66,13 @@ def markdown(lanes, total, sample_total):
                   sample_total, lambda i: i["sample"])
     out += ["", "### All tasks a lane completed", ""]
     out += _table(lanes, order, total, lambda i: True)
+    for a, b, title in PAIRS:
+        if a in lanes and b in lanes:
+            both = ({i["id"] for i in lanes[a]["items"] if not i["error"]}
+                    & {i["id"] for i in lanes[b]["items"] if not i["error"]})
+            out += ["", f"### Same model, two hosts: {title}", "",
+                    f"Compared only on the {len(both)} tasks both lanes scored.", ""]
+            out += _table(lanes, [a, b], len(both), lambda i: i["id"] in both)
     for title, key, values in (("F1 by document type", "doc_type", DOC_TYPES),
                                ("F1 by noise variant", "variant", VARIANTS)):
         out += ["", f"### {title}", "", "| Lane | " + " | ".join(values) + " |",

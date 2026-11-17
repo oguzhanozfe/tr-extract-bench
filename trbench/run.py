@@ -15,6 +15,9 @@ from .docs import SCHEMAS
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 GEMINI_MODELS = os.environ.get("TRB_GEMINI_MODELS", "gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemma-4-31b-it").split(",")
 DEEPSEEK_MODEL = os.environ.get("TRB_DEEPSEEK_MODEL", "deepseek-flash")
+LMSTUDIO_URL = os.environ.get("LMSTUDIO_URL")  # e.g. http://<gpu-box>:1234/v1 ; opt-in, no default
+LMSTUDIO_MODELS = [m for m in os.environ.get("TRB_LMSTUDIO_MODELS", "").split(",") if m]  # empty = all chat models
+GROQ_MODELS = os.environ.get("TRB_GROQ_MODELS", "qwen/qwen3.8-27b,openai/gpt-oss-120b").split(",")
 OPENAI_MODEL = os.environ.get("TRB_OPENAI_MODEL", "gpt-5-mini")
 ANTHROPIC_MODEL = os.environ.get("TRB_ANTHROPIC_MODEL", "claude-haiku-5-5")
 SYSTEM = "You extract structured data from Turkish business documents. Reply with one JSON object and nothing else."
@@ -36,7 +39,7 @@ def prompt(doc_type: str, text: str) -> str:
 
 
 def _post(url, body, headers, timeout=300):
-    req = urllib.request.Request(url, json.dumps(body).encode(), {"Content-Type": "application/json", **headers})
+    req = urllib.request.Request(url, json.dumps(body).encode(), {"Content-Type": "application/json", "User-Agent": "tr-extract-bench/0.1", **headers})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.load(r)
 
@@ -48,6 +51,27 @@ def ollama_models():
     except OSError:
         return {}
     return {n: d for n, d in sorted(models.items()) if "embed" not in n}  # embedding models cannot chat
+
+
+LMSTUDIO_NOTES = {"qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp": "community fine-tune of Qwen3.8-27B, "}
+
+
+def lmstudio_models():
+    if not LMSTUDIO_URL:
+        return []
+    try:
+        with urllib.request.urlopen(LMSTUDIO_URL + "/models", timeout=5) as r:
+            ids = [m["id"] for m in json.load(r)["data"]]
+    except OSError:
+        return []
+    return sorted(i for i in ids if "embed" not in i and (not LMSTUDIO_MODELS or i in LMSTUDIO_MODELS))
+
+
+def call_lmstudio(model, p):
+    d = _post(LMSTUDIO_URL + "/chat/completions", {"model": model, "temperature": 0,
+                                                   "messages": [{"role": "system", "content": SYSTEM},
+                                                                {"role": "user", "content": p}]}, {}, timeout=600)
+    return d["choices"][0]["message"]["content"]
 
 
 def call_ollama(model, p):
@@ -96,6 +120,16 @@ def lanes():
         out[DEEPSEEK_MODEL] = (DEEPSEEK_MODEL, "temperature=0, reasoning_effort=low",
                                              lambda p: _openai_compat("https://api.deepseek.com", "DEEPSEEK_API_KEY",
                                                                       DEEPSEEK_MODEL, p, {"reasoning_effort": "low"}), 0)
+    for m in lmstudio_models():  # sequential requests only: one shared GPU
+        note = LMSTUDIO_NOTES.get(m, "")
+        out["lmstudio-" + m.replace("/", "-")] = (m, f"temperature=0, {note}local RTX 3090 via LM Studio",
+                                                  lambda p, m=m: call_lmstudio(m, p), 0)
+    for gm in GROQ_MODELS if os.environ.get("GROQ_API_KEY") else []:
+        effort = "low" if gm.startswith("openai/gpt-oss") else "none"  # reasoning off where the model allows it
+        out["groq-" + gm.replace("/", "-")] = (
+            gm, f"temperature=0, reasoning_effort={effort}",
+            lambda p, gm=gm, effort=effort: _openai_compat("https://api.groq.com/openai/v1", "GROQ_API_KEY", gm, p,
+                                                           {"reasoning_effort": effort}), 12)  # free tier: 8k tokens/min
     if os.environ.get("OPENAI_API_KEY"):
         out["openai-" + OPENAI_MODEL] = (OPENAI_MODEL, "default settings",
                                          lambda p: _openai_compat("https://api.openai.com/v1", "OPENAI_API_KEY",

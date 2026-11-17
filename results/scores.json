@@ -311,6 +311,318 @@
     },
     "settings": "temperature=0, thought parts dropped"
   },
+  "groq-openai-gpt-oss-120b": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.9771863117870723,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9884615384615385,
+        "recall": 0.9661654135338346
+      },
+      "cargo_notice": {
+        "f1": 0.9897483690587138,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9943820224719101,
+        "recall": 0.9851576994434137
+      },
+      "invoice": {
+        "f1": 0.9675090252707581,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9781021897810219,
+        "recall": 0.9571428571428572
+      },
+      "kap_disclosure": {
+        "f1": 0.9853658536585367,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9869706840390879,
+        "recall": 0.9837662337662337
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "distractors": {
+        "f1": 0.9966329966329966,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9966329966329966,
+        "recall": 0.9966329966329966
+      },
+      "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 0.8449197860962567,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.8977272727272727,
+        "recall": 0.797979797979798
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "openai/gpt-oss-120b",
+    "overall": {
+      "f1": 0.9784242424242424,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 224,
+      "precision": 0.9863147605083089,
+      "recall": 0.9706589706589707
+    },
+    "settings": "temperature=0, reasoning_effort=low"
+  },
+  "groq-qwen-qwen3.8-27b": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.9924812030075187,
+        "halluc_rate": 0.0018796992481203006,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9924812030075187,
+        "recall": 0.9924812030075187
+      },
+      "cargo_notice": {
+        "f1": 0.9841269841269841,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 7,
+        "precision": 0.9841269841269841,
+        "recall": 0.9841269841269841
+      },
+      "invoice": {
+        "f1": 0.9814285714285714,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9814285714285714,
+        "recall": 0.9814285714285714
+      },
+      "kap_disclosure": {
+        "f1": 0.9950738916256159,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 37,
+        "precision": 0.9950738916256158,
+        "recall": 0.9950738916256158
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 22,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 23,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "distractors": {
+        "f1": 0.9952830188679245,
+        "halluc_rate": 0.0047169811320754715,
+        "json_valid": 1.0,
+        "n": 22,
+        "precision": 0.9952830188679245,
+        "recall": 0.9952830188679245
+      },
+      "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 22,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 23,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 0.9150943396226415,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 22,
+        "precision": 0.9150943396226415,
+        "recall": 0.9150943396226415
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 22,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "qwen/qwen3.8-27b",
+    "overall": {
+      "f1": 0.9873164218958611,
+      "halluc_rate": 0.0006675567423230974,
+      "json_valid": 1.0,
+      "n": 156,
+      "precision": 0.9873164218958611,
+      "recall": 0.9873164218958611
+    },
+    "settings": "temperature=0, reasoning_effort=none"
+  },
+  "lmstudio-qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.9943609022556391,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9943609022556391,
+        "recall": 0.9943609022556391
+      },
+      "cargo_notice": {
+        "f1": 0.9962894248608535,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9962894248608535,
+        "recall": 0.9962894248608535
+      },
+      "invoice": {
+        "f1": 0.9814285714285714,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9814285714285714,
+        "recall": 0.9814285714285714
+      },
+      "kap_disclosure": {
+        "f1": 0.9967532467532467,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9967532467532467,
+        "recall": 0.9967532467532467
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "distractors": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 0.936026936026936,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.936026936026936,
+        "recall": 0.936026936026936
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "qwen3.8-27b-uncensored-hauhaucs-aggressive-mtp",
+    "overall": {
+      "f1": 0.9908609908609909,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 224,
+      "precision": 0.9908609908609909,
+      "recall": 0.9908609908609909
+    },
+    "settings": "temperature=0, community fine-tune of Qwen3.8-27B, local RTX 3090 via LM Studio"
+  },
   "ollama-qwen3.5-4b": {
     "by_doc_type": {
       "bank_statement": {

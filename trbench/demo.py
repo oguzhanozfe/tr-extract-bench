@@ -14,7 +14,7 @@ from .score import aggregate, field_checks, parse_output, score_item
 
 DEMO_IDS = ["invoice-00-ocr_values", "bank_statement-00-clean", "kap_disclosure-00-mixed",
             "cargo_notice-00-distractors"]
-CLOUD_PREFERENCE = ["gemini-3.5-flash-lite", "openai-", "anthropic-"]  # DeepSeek stays out of the demo
+CLOUD_PREFERENCE = ["gemini-3.5-flash-lite", "groq-", "openai-", "anthropic-"]  # DeepSeek stays out of the demo
 LOCAL_PREFERENCE = ["ollama-qwen3.5-9b", "ollama-"]
 REPLAY_LANE = "ollama-qwen3.5-4b"  # recorded lane with visible mistakes, so the scoring has something to show
 RECORDED_ON = "2026-11-17"
