@@ -67,9 +67,9 @@ def markdown(lanes, total, sample_total):
                 "|---|" + "---|" * len(values)]
         for k in order:
             groups = [[i for i in lanes[k]["items"] if i[key] == v and not i["error"]] for v in values]
-            cells = [_pct(aggregate(g)["f1"]) if g else "–" for g in groups]
+            cells = [_pct(aggregate(g)["f1"]) if len(g) >= 4 else "–" for g in groups]
             out.append(f"| {k} | " + " | ".join(cells) + " |")
-    out += ["", "Settings: " + "; ".join(f"`{k}` {lanes[k]['settings']}" for k in order)]
+    out += ["", "`–`: fewer than 4 scored tasks in that bucket.", "", "Settings: " + "; ".join(f"`{k}` {lanes[k]['settings']}" for k in order)]
     return "\n".join(out) + "\n"
 
 

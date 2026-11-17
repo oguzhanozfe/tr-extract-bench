@@ -38,6 +38,8 @@ Base document 00 of each type in every variant. Every lane ran this sample first
 | gemini-3.5-flash-lite | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 93.2 | 99.7 |
 | ollama-qwen3.5-9b | 99.8 | 99.8 | 99.8 | 99.8 | 99.5 | 90.1 | 99.8 |
 | ollama-qwen3.5-4b | 98.0 | 95.5 | 95.4 | 97.0 | 95.1 | 87.9 | 96.8 |
-| gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | – |
+| gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | – | – |
+
+`–`: fewer than 4 scored tasks in that bucket.
 
 Settings: `gemini-3.1-flash-lite` temperature=0, thinkingLevel=low; `gemini-3.5-flash-lite` temperature=0, thinkingLevel=low; `ollama-qwen3.5-9b` temperature=0, think=false, digest=56671c2ab938; `ollama-qwen3.5-4b` temperature=0, think=false, digest=2a654d98e6fb; `gemma-4-31b-it` temperature=0, thought parts dropped

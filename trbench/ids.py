@@ -1,7 +1,7 @@
 """Checksum-valid Turkish identifiers (VKN, TCKN, IBAN) for synthetic documents.
 
 All generated values are random and fictional. Bank codes used by the generator
-sit in the 9xxxx range so a generated IBAN never points at a real bank's code.
+are 9000x, chosen to look unlike real Turkish bank codes (not checked against the full EFT list).
 """
 
 

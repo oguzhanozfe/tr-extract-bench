@@ -30,12 +30,15 @@ it returns broken JSON, and whether it invents values for fields that are not th
   Hard tier (64 tasks), added after every lane scored about 100% on the baseline tier:
   - `ocr_values`: label and prose OCR as above, plus OCR inside values: digits become
     lookalike letters (`0→O`, `1→l`, `5→S`, `8→B`, `2→Z`) in amounts, dates, IDs and IBANs.
-    A letter inside a number is always an error, so the truth stays recoverable. Names are
-    not touched, because their invented spelling could not be recovered.
+    A letter inside a purely numeric field is always an error, so the truth stays
+    recoverable. `invoice_no` is alphanumeric (3 letters, year, 9 digits), so undoing a swap
+    there requires knowing the e-fatura number format. Names are not touched, because their
+    invented spelling could not be recovered.
   - `distractors`: four extra labelled lines that are not schema fields, picked from: print date,
     reference number, previous-period total, customer representative, a closed account's IBAN
 - **Identifiers** are checksum-valid but fictional: VKN and TCKN by the official check-digit
-  rules, TR IBANs by ISO 13616 mod-97 with bank codes in the unused `9xxxx` range. The
+  rules, TR IBANs by ISO 13616 mod-97 with bank codes `9000x`, chosen to look unlike real bank codes (not checked against the full EFT
+  list). The
   algorithms are tested against published reference values and were cross-checked against
   `python-stdnum` during development. Every document carries a visible
   `SENTETİK ÖRNEK BELGE / SYNTHETIC TEST DOCUMENT` line and `"synthetic": true`.
@@ -85,19 +88,23 @@ What the recorded runs show:
 - **Turkish number format trips the small local model.** `qwen3.5:4b` reads balances like
   `89.625,39` as `89.62539`, so its bank-statement F1 is 85.1 while every other lane scores
   98 or more.
-- **No lane invented a value for an absent field** (0.0% hallucinated). JSON validity was
+- **Almost no invented values.** `qwen3.5:4b` filled one absent field across 224 tasks;
+  no other lane filled any. JSON validity was
   99.1% or higher without any JSON mode, and the distractor lines barely moved any lane.
 - **Latency** (median per document): flash-lite lanes 1.3 to 1.9 s over the network;
   `qwen3.5:9b` 8.3 s and `qwen3.5:4b` 3.0 s on a shared Mac.
 
 Lanes and why some are partial:
 
-- Both Ollama lanes (`qwen3.5:9b`, `qwen3.5:4b`) ran all 224 tasks on a local Mac whose Ollama
-  server other jobs were also using.
-- Cloud lanes use the Gemini API free tier. `gemini-3.5-flash` stopped after 20 requests
-  with a per-day quota error, so it was dropped. Both flash-lite lanes completed all 224
+- Both Ollama lanes (`qwen3.5:9b`, `qwen3.5:4b`) ran all 224 tasks on a local Mac. The 9b
+  lane shared the Ollama server with other jobs; the 4b lane ran in a quiet window, so their
+  latencies are not like for like.
+- Cloud lanes use the Gemini API free tier. `gemini-3.5-flash` hit the free tier's
+  per-day quota (20 requests) after 22 recorded tasks, so it was dropped. Both flash-lite lanes completed all 224
   tasks. `gemma-4-31b-it` answered slowly (about a minute per document, with long
-  reasoning), so it ran only the shared sample. A lane marked partial ran out of quota or
+  reasoning) and often returned HTTP 503, so it ran only on the shared sample and finished 21
+  of its 28 tasks. Its 100.0 covers mostly baseline-tier tasks and is not comparable with
+  the full-set lanes. A lane marked partial ran out of quota or
   time; its scores cover only the tasks it completed.
 - DeepSeek has an adapter, but the account had a zero balance (HTTP 402), so it was not run.
 - Requests that failed at the transport or API level (timeouts, HTTP 503) are retried and
@@ -144,7 +151,9 @@ Base document 00 of each type in every variant. Every lane ran this sample first
 | gemini-3.5-flash-lite | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 93.2 | 99.7 |
 | ollama-qwen3.5-9b | 99.8 | 99.8 | 99.8 | 99.8 | 99.5 | 90.1 | 99.8 |
 | ollama-qwen3.5-4b | 98.0 | 95.5 | 95.4 | 97.0 | 95.1 | 87.9 | 96.8 |
-| gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | – |
+| gemma-4-31b-it | 100.0 | 100.0 | 100.0 | 100.0 | 100.0 | – | – |
+
+`–`: fewer than 4 scored tasks in that bucket.
 
 Settings: `gemini-3.1-flash-lite` temperature=0, thinkingLevel=low; `gemini-3.5-flash-lite` temperature=0, thinkingLevel=low; `ollama-qwen3.5-9b` temperature=0, think=false, digest=56671c2ab938; `ollama-qwen3.5-4b` temperature=0, think=false, digest=2a654d98e6fb; `gemma-4-31b-it` temperature=0, thought parts dropped
 <!-- LEADERBOARD:END -->
@@ -177,8 +186,9 @@ Lanes are discovered automatically:
 - DeepSeek if `DEEPSEEK_API_KEY` is set (`TRB_DEEPSEEK_MODEL`, default `deepseek-flash`)
 - OpenAI if `OPENAI_API_KEY` is set, Anthropic if `ANTHROPIC_API_KEY` is set
 
-All lanes run at temperature 0 with thinking off or at its lowest setting; the exact
-settings (and the Ollama model digest) are stored in every result row.
+Lanes run at temperature 0. Thinking is off for Ollama and set to `low` for Gemini models;
+`gemma-4-31b-it` accepts no thinking setting and reasons by default (its thought parts are
+dropped before scoring). The OpenAI lane uses default settings. The exact settings (and the Ollama model digest) are stored in every result row.
 
 ## Known limits
 
