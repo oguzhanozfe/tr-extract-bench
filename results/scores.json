@@ -1,0 +1,354 @@
+{
+  "gemini-3.1-flash-lite": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "cargo_notice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "invoice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "kap_disclosure": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "gemini-3.1-flash-lite",
+    "overall": {
+      "f1": 1.0,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 20,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "settings": "temperature=0, thinkingLevel=low"
+  },
+  "gemini-3.5-flash-lite": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "cargo_notice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "invoice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 20,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "kap_disclosure": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 7,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 8,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 6,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 7,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 7,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "gemini-3.5-flash-lite",
+    "overall": {
+      "f1": 1.0,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 35,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "settings": "temperature=0, thinkingLevel=low"
+  },
+  "gemma-4-31b-it": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "cargo_notice": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "invoice": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "kap_disclosure": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "clean": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "mixed": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "ocr": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "reordered": {
+        "f1": 0.0,
+        "halluc_rate": 0.0,
+        "json_valid": 0.0,
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "model": "gemma-4-31b-it",
+    "overall": {
+      "f1": 0.0,
+      "halluc_rate": 0.0,
+      "json_valid": 0.0,
+      "n": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "settings": "temperature=0, thought parts dropped"
+  },
+  "ollama-qwen3.5-9b": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.9973684210526316,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 40,
+        "precision": 0.9973684210526316,
+        "recall": 0.9973684210526316
+      },
+      "cargo_notice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 40,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "invoice": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 40,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "kap_disclosure": {
+        "f1": 0.9885057471264368,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 40,
+        "precision": 1.0,
+        "recall": 0.9772727272727273
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 0.9983136593591906,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 0.9966329966329966
+      },
+      "clean": {
+        "f1": 0.9983136593591906,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 0.9966329966329966
+      },
+      "mixed": {
+        "f1": 0.9983136593591906,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 0.9966329966329966
+      },
+      "ocr": {
+        "f1": 0.9983136593591906,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 0.9966329966329966
+      },
+      "reordered": {
+        "f1": 0.9949409780775715,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9966216216216216,
+        "recall": 0.9932659932659933
+      }
+    },
+    "model": "qwen3.5:9b",
+    "overall": {
+      "f1": 0.9976391231028666,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 160,
+      "precision": 0.9993243243243243,
+      "recall": 0.9959595959595959
+    },
+    "settings": "temperature=0, think=false, digest=56671c2ab938"
+  }
+}
