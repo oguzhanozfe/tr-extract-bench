@@ -111,33 +111,34 @@ def is_null(v) -> bool:
     return v is None or (isinstance(v, str) and v.strip().lower() in ("", "null", "none", "yok", "n/a"))
 
 
+def field_checks(doc_type: str, gold: dict, pred: dict) -> list:
+    """(field, gold, predicted, status) per field; status: ok, missed, wrong, invented, absent, extra."""
+    rows = []
+    for name, ftype, _ in SCHEMAS[doc_type]:
+        g, p = gold[name], pred.get(name)
+        if is_null(p):
+            rows.append((name, g, None, "missed" if g is not None else "absent"))
+        elif g is None:
+            rows.append((name, g, p, "invented"))
+        else:
+            rows.append((name, g, p, "ok" if match(ftype, p, g) else "wrong"))
+    names = {name for name, _, _ in SCHEMAS[doc_type]}
+    rows += [(k, None, v, "extra") for k, v in pred.items() if k not in names and not is_null(v)]
+    return rows
+
+
 def score_item(doc_type: str, gold: dict, output: str) -> dict:
-    schema = SCHEMAS[doc_type]
     pred = parse_output(output)
     r = {"json_valid": pred is not None, "tp": 0, "fp": 0, "fn": 0, "halluc": 0, "emitted": 0}
     if pred is None:
-        r["fn"] = sum(1 for name, _, _ in schema if gold[name] is not None)
+        r["fn"] = sum(1 for name, _, _ in SCHEMAS[doc_type] if gold[name] is not None)
         return r
-    names = {name for name, _, _ in schema}
-    extra = [k for k in pred if k not in names and not is_null(pred[k])]
-    r["halluc"] += len(extra)
-    r["fp"] += len(extra)
-    r["emitted"] += len(extra)
-    for name, ftype, _ in schema:
-        g, p = gold[name], pred.get(name)
-        if is_null(p):
-            if g is not None:
-                r["fn"] += 1
-            continue
-        r["emitted"] += 1
-        if g is None:
-            r["fp"] += 1
-            r["halluc"] += 1
-        elif match(ftype, p, g):
-            r["tp"] += 1
-        else:
-            r["fp"] += 1
-            r["fn"] += 1
+    for _, _, _, status in field_checks(doc_type, gold, pred):
+        r["tp"] += status == "ok"
+        r["fp"] += status in ("wrong", "invented", "extra")
+        r["fn"] += status in ("wrong", "missed")
+        r["halluc"] += status in ("invented", "extra")
+        r["emitted"] += status in ("ok", "wrong", "invented", "extra")
     return r
 
 

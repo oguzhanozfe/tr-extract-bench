@@ -16,3 +16,5 @@ jobs:
         run: python -m trbench gen --check
       - name: Leaderboard matches recorded outputs
         run: python -m trbench score --check
+      - name: Demo runs with no key (replay mode)
+        run: python -m trbench demo --mode replay

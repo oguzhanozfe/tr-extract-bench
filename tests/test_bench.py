@@ -92,5 +92,17 @@ class Dataset(unittest.TestCase):
                 self.assertFalse(set(r["text"]) & set("ıİşŞğĞüÜöÖçÇ"))
 
 
+class Demo(unittest.TestCase):
+    def test_replay_demo_runs_offline(self):
+        import contextlib
+        import io
+        from trbench.__main__ import main
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            self.assertEqual(main(["demo", "--mode", "replay"]), 0)
+        self.assertIn("mode: replay", buf.getvalue())
+        self.assertIn("ollama-qwen3.5-9b", buf.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -5,6 +5,7 @@ import os
 import statistics
 
 from .docs import DOC_TYPES, VARIANTS
+from . import page
 from .score import aggregate, score_item
 
 START, END = "<!-- LEADERBOARD:START -->", "<!-- LEADERBOARD:END -->"
@@ -88,7 +89,8 @@ def write_reports(dataset, raw_dir, root, check=False):
     lanes, total, sample_total = build(dataset, raw_dir)
     md = markdown(lanes, total, sample_total)
     targets = {os.path.join(root, "results", "leaderboard.md"): md,
-               os.path.join(root, "results", "scores.json"): summary_json(lanes)}
+               os.path.join(root, "results", "scores.json"): summary_json(lanes),
+               os.path.join(root, "docs", "index.html"): page.render(md, dataset, raw_dir)}
     readme = os.path.join(root, "README.md")
     if os.path.exists(readme):
         text = open(readme, encoding="utf-8").read()
@@ -101,6 +103,7 @@ def write_reports(dataset, raw_dir, root, check=False):
         if current != content:
             stale.append(os.path.relpath(path, root))
             if not check:
+                os.makedirs(os.path.dirname(path), exist_ok=True)
                 with open(path, "w", encoding="utf-8") as f:
                     f.write(content)
     return stale

@@ -33,6 +33,8 @@ def main(argv=None):
     g = sub.add_parser("gen", help="write data/docs.jsonl")
     g.add_argument("--check", action="store_true", help="fail if the committed dataset differs")
     sub.add_parser("lanes", help="list lanes available on this machine")
+    d = sub.add_parser("demo", help="extract and score a few documents; works with no key")
+    d.add_argument("--mode", choices=["auto", "live", "replay"], default="auto")
     r = sub.add_parser("run", help="run lanes (default: all available)")
     r.add_argument("--lane", action="append")
     r.add_argument("--limit", type=int)
@@ -51,6 +53,9 @@ def main(argv=None):
         with open(DATA, "w", encoding="utf-8") as f:
             f.write(text)
         print(f"wrote {text.count(chr(10))} rows")
+    elif a.cmd == "demo":
+        from .demo import run_demo
+        return run_demo(a.mode, load(DATA), RAW)
     elif a.cmd == "lanes":
         for name, (model, settings, _, _) in lanes().items():
             print(f"{name}\t{settings}")

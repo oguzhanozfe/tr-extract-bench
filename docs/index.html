@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tr-extract-bench</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6862;--line:#e3e0d8;--card:#fff;--ok:#1f7a4d;--bad:#b3261e;--warn:#9a5b00;
+--accent:#0b5cad}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--fg:#ecebe6;--muted:#a19e96;--line:#34332f;--card:#1d1c1a;
+--ok:#5cc28d;--bad:#ff8a80;--warn:#f0b35a;--accent:#7db4ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);
+font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:32px 16px 64px}h1{font-size:28px;margin:0 0 4px}
+h2{font-size:20px;margin:40px 0 8px}h3{font-size:16px;margin:24px 0 8px}p{margin:6px 0;color:var(--muted)}
+a{color:var(--accent)}code{font:13px ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{overflow-x:auto}table{border-collapse:collapse;font-size:14px;width:100%;background:var(--card)}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}th{background:var(--bg)}
+.ex{border:1px solid var(--line);border-radius:8px;background:var(--card);padding:16px;margin:16px 0}
+.ex h3{margin:0 0 2px}.cols{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px;margin-top:10px}
+@media (max-width:900px){.cols{grid-template-columns:1fr}}
+pre{margin:0;padding:10px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow-x:auto;
+font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:4px}
+.checks td,.checks th{white-space:normal;text-align:left;font-size:13px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.warn{color:var(--warn)}
+</style></head><body><main>
+<h1>tr-extract-bench</h1>
+<p>How well LLMs pull structured JSON out of Turkish business documents: e-fatura invoices, bank statements,
+KAP disclosures, cargo notices. All documents are synthetic with exact ground truth; every number here is
+rebuilt from recorded model outputs. <a href="https://github.com/oguzhanozfe/tr-extract-bench">Source, method
+and limits on GitHub</a>.</p>
+<h2>Leaderboard</h2>
+<h3>Shared sample: every lane on the same 28 tasks</h3>
+<p>Base document 00 of each type in every variant. Every lane ran this sample first, so it is the like-for-like comparison when a lane could not finish the full set.</p>
+<div class="wrap"><table><thead><tr><th>Lane</th><th>Tasks scored</th><th>F1</th><th>Precision</th><th>Recall</th><th>JSON valid %</th><th>Hallucinated %</th><th>Median latency s</th><th>Unscored API errors</th></tr></thead><tbody><tr><td>gemini-3.1-flash-lite</td><td>28/28</td><td>99.6</td><td>99.6</td><td>99.6</td><td>100.0</td><td>0.0</td><td>1.9</td><td>0</td></tr><tr><td>ollama-qwen3.5-9b</td><td>28/28</td><td>99.6</td><td>99.6</td><td>99.6</td><td>100.0</td><td>0.0</td><td>17.6</td><td>0</td></tr><tr><td>gemini-3.5-flash-lite</td><td>28/28</td><td>99.2</td><td>99.2</td><td>99.2</td><td>100.0</td><td>0.0</td><td>1.7</td><td>0</td></tr><tr><td>gemma-4-31b-it</td><td>21/28 (partial)</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>0.0</td><td>56.9</td><td>2</td></tr><tr><td>ollama-qwen3.5-4b</td><td>28/28</td><td>91.5</td><td>91.8</td><td>91.1</td><td>100.0</td><td>0.0</td><td>2.9</td><td>0</td></tr></tbody></table></div>
+<h3>All tasks a lane completed</h3>
+<div class="wrap"><table><thead><tr><th>Lane</th><th>Tasks scored</th><th>F1</th><th>Precision</th><th>Recall</th><th>JSON valid %</th><th>Hallucinated %</th><th>Median latency s</th><th>Unscored API errors</th></tr></thead><tbody><tr><td>gemini-3.1-flash-lite</td><td>224/224</td><td>99.3</td><td>99.3</td><td>99.3</td><td>100.0</td><td>0.0</td><td>1.9</td><td>0</td></tr><tr><td>gemini-3.5-flash-lite</td><td>224/224</td><td>99.0</td><td>99.1</td><td>98.9</td><td>100.0</td><td>0.0</td><td>1.3</td><td>0</td></tr><tr><td>ollama-qwen3.5-9b</td><td>224/224</td><td>98.4</td><td>99.0</td><td>97.9</td><td>99.6</td><td>0.0</td><td>8.3</td><td>0</td></tr><tr><td>ollama-qwen3.5-4b</td><td>224/224</td><td>95.1</td><td>95.8</td><td>94.5</td><td>99.1</td><td>0.0</td><td>3.0</td><td>0</td></tr><tr><td>gemma-4-31b-it</td><td>21/224 (partial)</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>0.0</td><td>56.9</td><td>2</td></tr></tbody></table></div>
+<h3>F1 by document type</h3>
+<div class="wrap"><table><thead><tr><th>Lane</th><th>invoice</th><th>bank_statement</th><th>kap_disclosure</th><th>cargo_notice</th></tr></thead><tbody><tr><td>gemini-3.1-flash-lite</td><td>98.9</td><td>99.2</td><td>100.0</td><td>99.6</td></tr><tr><td>gemini-3.5-flash-lite</td><td>98.3</td><td>99.2</td><td>99.7</td><td>99.3</td></tr><tr><td>ollama-qwen3.5-9b</td><td>98.1</td><td>98.2</td><td>97.9</td><td>99.4</td></tr><tr><td>ollama-qwen3.5-4b</td><td>98.3</td><td>85.1</td><td>97.4</td><td>99.4</td></tr><tr><td>gemma-4-31b-it</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td></tr></tbody></table></div>
+<h3>F1 by noise variant</h3>
+<div class="wrap"><table><thead><tr><th>Lane</th><th>clean</th><th>ocr</th><th>ascii</th><th>mixed</th><th>reordered</th><th>ocr_values</th><th>distractors</th></tr></thead><tbody><tr><td>gemini-3.1-flash-lite</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>95.3</td><td>100.0</td></tr><tr><td>gemini-3.5-flash-lite</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>93.2</td><td>99.7</td></tr><tr><td>ollama-qwen3.5-9b</td><td>99.8</td><td>99.8</td><td>99.8</td><td>99.8</td><td>99.5</td><td>90.1</td><td>99.8</td></tr><tr><td>ollama-qwen3.5-4b</td><td>98.0</td><td>95.5</td><td>95.4</td><td>97.0</td><td>95.1</td><td>87.9</td><td>96.8</td></tr><tr><td>gemma-4-31b-it</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>100.0</td><td>–</td><td>–</td></tr></tbody></table></div>
+<p><code>–</code>: fewer than 4 scored tasks in that bucket.</p>
+<p>Settings: <code>gemini-3.1-flash-lite</code> temperature=0, thinkingLevel=low; <code>gemini-3.5-flash-lite</code> temperature=0, thinkingLevel=low; <code>ollama-qwen3.5-9b</code> temperature=0, think=false, digest=56671c2ab938; <code>ollama-qwen3.5-4b</code> temperature=0, think=false, digest=2a654d98e6fb; <code>gemma-4-31b-it</code> temperature=0, thought parts dropped</p>
+<h2>Worked examples</h2>
+<p>Recorded outputs, scored field by field. Matching rules: amounts to the cent, dates in any common
+Turkish format, names ignoring diacritics.</p>
+<section class="ex"><h3><code>bank_statement-00-clean</code> · ollama-qwen3.5-4b</h3><p>Reads the Turkish thousands separator as a decimal point.</p><div class="cols"><div><div class="lbl">Document (synthetic)</div><pre>HESAP EKSTRESİ
+*** SENTETİK ÖRNEK BELGE - gerçek değildir / SYNTHETIC TEST DOCUMENT ***
+Banka: Deneme Yatırım Bankası
+Hesap Sahibi: Mustafa Güneş
+IBAN: TR73 9000 3007 1859 6443 0034 87
+Ekstre Dönemi: 01.12.2025 - 31.12.2025
+Devreden Bakiye: 89.625,39 TL
+Tarih | Açıklama | Tutar | Bakiye
+04.12.2025 | POS Harcama - MARKET | -13.419,48 | 76.205,91
+05.12.2025 | EFT Gelen - Mehmet Aydın | 4.851,67 | 81.057,58
+06.12.2025 | Havale Gelen - Gökbora Makine San. ve Tic. A.Ş. | 55.653,78 | 136.711,36
+07.12.2025 | EFT Gelen - Elif Kaya | 15.510,90 | 152.222,26
+08.12.2025 | Havale Gelen - Tunçdağ Gıda San. ve Tic. A.Ş. | 58.757,71 | 210.979,97
+11.12.2025 | Maaş Ödemesi | 26.468,57 | 237.448,54
+15.12.2025 | Fatura Ödemesi - Doğalgaz | -8.839,41 | 228.609,13
+Toplam Alacak: 161.242,63 TL
+Toplam Borç: 22.258,89 TL
+Dönem Sonu Bakiye: 228.609,13 TL</pre></div><div><div class="lbl">Extracted JSON</div><pre>{
+  &quot;bank_name&quot;: &quot;Deneme Yatırım Bankası&quot;,
+  &quot;account_holder&quot;: &quot;Mustafa Güneş&quot;,
+  &quot;iban&quot;: &quot;TR739000300718596443003487&quot;,
+  &quot;period_start&quot;: &quot;2025-12-01&quot;,
+  &quot;period_end&quot;: &quot;2025-12-31&quot;,
+  &quot;opening_balance&quot;: 89.62539,
+  &quot;closing_balance&quot;: 228.60913,
+  &quot;total_credits&quot;: 87.482447,
+  &quot;total_debits&quot;: 22.25889,
+  &quot;overdraft_limit&quot;: null
+}</pre></div><div><div class="lbl">Scored against the truth</div><div class="wrap"><table class="checks"><thead><tr><th>field</th><th>truth</th><th>extracted</th><th></th></tr></thead><tbody><tr><td><code>bank_name</code></td><td>Deneme Yatırım Bankası</td><td>Deneme Yatırım Bankası</td><td class="ok">correct</td></tr><tr><td><code>account_holder</code></td><td>Mustafa Güneş</td><td>Mustafa Güneş</td><td class="ok">correct</td></tr><tr><td><code>iban</code></td><td>TR739000300718596443003487</td><td>TR739000300718596443003487</td><td class="ok">correct</td></tr><tr><td><code>period_start</code></td><td>2025-12-01</td><td>2025-12-01</td><td class="ok">correct</td></tr><tr><td><code>period_end</code></td><td>2025-12-31</td><td>2025-12-31</td><td class="ok">correct</td></tr><tr><td><code>opening_balance</code></td><td>89625.39</td><td>89.62539</td><td class="bad">wrong</td></tr><tr><td><code>closing_balance</code></td><td>228609.13</td><td>228.60913</td><td class="bad">wrong</td></tr><tr><td><code>total_credits</code></td><td>161242.63</td><td>87.482447</td><td class="bad">wrong</td></tr><tr><td><code>total_debits</code></td><td>22258.89</td><td>22.25889</td><td class="bad">wrong</td></tr><tr><td><code>overdraft_limit</code></td><td>null</td><td>null</td><td class="ok">correctly null</td></tr></tbody></table></div></div></div></section><section class="ex"><h3><code>invoice-07-ocr_values</code> · gemini-3.1-flash-lite</h3><p>Copies OCR letters into IDs instead of correcting them.</p><div class="cols"><div><div class="lbl">Document (synthetic)</div><pre>e-FATURA
+*** SENTETİK ÖRNEK BELGE - qerçek değildir / SYNTHETIC TEST DOCUMENT ***
+Satıcı: Karaçamlı Yazılım Ltd. Şti.
+  Vergl Dalresi: Çankaya V.D.
+  VKN: 6Z79888359
+Alıcı (Sayin): İbrahim Yılmaz
+  TCKN: 5l619836lZ2
+Fatura No:YRV2O2SO00O69666
+Fafura Torihi: 20 Nisan 2025
+5on Ödeme Tarihi: 20 Mayıs 2025
+Mal/Hizmct | Miktor | Birim Fiyot | Tutar
+Ofis saridalyesi | 7 | 2.881,66 | 20.171,62
+Yazılım lisansı| 26 | 1.499,44 | 38.985,44
+Ma1 Hizmet Toplam Tutari: TL S9.157,06
+HesaplononKDV(%20): TL 11.83l,41
+Ödenecek Tutar: TL 70.988,47
+Ödeme IBAN: TR70 9000 3042 4033 3363 0981 15</pre></div><div><div class="lbl">Extracted JSON</div><pre>{
+  &quot;invoice_no&quot;: &quot;YRV2O2SO00O69666&quot;,
+  &quot;invoice_date&quot;: &quot;2025-04-20&quot;,
+  &quot;due_date&quot;: &quot;2025-05-20&quot;,
+  &quot;seller_name&quot;: &quot;Karaçamlı Yazılım Ltd. Şti.&quot;,
+  &quot;seller_vkn&quot;: &quot;6Z79888359&quot;,
+  &quot;seller_tax_office&quot;: &quot;Çankaya V.D.&quot;,
+  &quot;buyer_name&quot;: &quot;İbrahim Yılmaz&quot;,
+  &quot;buyer_id&quot;: &quot;5l619836lZ2&quot;,
+  &quot;subtotal&quot;: 59157.06,
+  &quot;vat_rate&quot;: 20,
+  &quot;vat_amount&quot;: 11831.41,
+  &quot;total&quot;: 70988.47,
+  &quot;payment_iban&quot;: &quot;TR709000304240333363098115&quot;
+}</pre></div><div><div class="lbl">Scored against the truth</div><div class="wrap"><table class="checks"><thead><tr><th>field</th><th>truth</th><th>extracted</th><th></th></tr></thead><tbody><tr><td><code>invoice_no</code></td><td>YRV2025000069666</td><td>YRV2O2SO00O69666</td><td class="bad">wrong</td></tr><tr><td><code>invoice_date</code></td><td>2025-04-20</td><td>2025-04-20</td><td class="ok">correct</td></tr><tr><td><code>due_date</code></td><td>2025-05-20</td><td>2025-05-20</td><td class="ok">correct</td></tr><tr><td><code>seller_name</code></td><td>Karaçamlı Yazılım Ltd. Şti.</td><td>Karaçamlı Yazılım Ltd. Şti.</td><td class="ok">correct</td></tr><tr><td><code>seller_vkn</code></td><td>6279888359</td><td>6Z79888359</td><td class="bad">wrong</td></tr><tr><td><code>seller_tax_office</code></td><td>Çankaya</td><td>Çankaya V.D.</td><td class="ok">correct</td></tr><tr><td><code>buyer_name</code></td><td>İbrahim Yılmaz</td><td>İbrahim Yılmaz</td><td class="ok">correct</td></tr><tr><td><code>buyer_id</code></td><td>51619836122</td><td>5l619836lZ2</td><td class="bad">wrong</td></tr><tr><td><code>subtotal</code></td><td>59157.06</td><td>59157.06</td><td class="ok">correct</td></tr><tr><td><code>vat_rate</code></td><td>20</td><td>20</td><td class="ok">correct</td></tr><tr><td><code>vat_amount</code></td><td>11831.41</td><td>11831.41</td><td class="ok">correct</td></tr><tr><td><code>total</code></td><td>70988.47</td><td>70988.47</td><td class="ok">correct</td></tr><tr><td><code>payment_iban</code></td><td>TR709000304240333363098115</td><td>TR709000304240333363098115</td><td class="ok">correct</td></tr></tbody></table></div></div></div></section><section class="ex"><h3><code>kap_disclosure-06-distractors</code> · ollama-qwen3.5-4b</h3><p>Takes an amount from a distractor line for a field the disclosure does not have.</p><div class="cols"><div><div class="lbl">Document (synthetic)</div><pre>ÖZEL DURUM AÇIKLAMASI
+*** SENTETİK ÖRNEK BELGE - gerçek değildir / SYNTHETIC TEST DOCUMENT ***
+Şirket Unvanı: Beyazkumlu Tekstil A.Ş.
+Borsa Kodu: BEYAX
+Açıklama Tarihi: 25/03/2025
+Müşteri Temsilcisi: Özge Işıkçı
+Referans No: 4023188032672429
+Konu: Yönetim Kurulu Değişikliği
+Önceki Dönem Toplamı: 12.858,12 TL
+Yazdırma Tarihi: 21.08.2026
+Yönetim Kurulu Üyemiz Ilgın Öztürk görevinden istifa etmiş olup, boşalan üyeliğe 7 Nisan 2025 tarihinden itibaren geçerli olmak üzere İbrahim Demir atanmıştır.
+Yukarıdaki açıklamalarımızın, Sermaye Piyasası Kurulu düzenlemelerine uygun olduğunu beyan ederiz.</pre></div><div><div class="lbl">Extracted JSON</div><pre>{
+  &quot;company_name&quot;: &quot;Beyazkumlu Tekstil A.Ş.&quot;,
+  &quot;ticker&quot;: &quot;BEYAX&quot;,
+  &quot;disclosure_date&quot;: &quot;2025-03-25&quot;,
+  &quot;disclosure_type&quot;: &quot;Yönetim Kurulu Değişikliği&quot;,
+  &quot;counterparty&quot;: null,
+  &quot;amount&quot;: 12858.12,
+  &quot;effective_date&quot;: &quot;2025-04-07&quot;
+}</pre></div><div><div class="lbl">Scored against the truth</div><div class="wrap"><table class="checks"><thead><tr><th>field</th><th>truth</th><th>extracted</th><th></th></tr></thead><tbody><tr><td><code>company_name</code></td><td>Beyazkumlu Tekstil A.Ş.</td><td>Beyazkumlu Tekstil A.Ş.</td><td class="ok">correct</td></tr><tr><td><code>ticker</code></td><td>BEYAX</td><td>BEYAX</td><td class="ok">correct</td></tr><tr><td><code>disclosure_date</code></td><td>2025-03-25</td><td>2025-03-25</td><td class="ok">correct</td></tr><tr><td><code>disclosure_type</code></td><td>Yönetim Kurulu Değişikliği</td><td>Yönetim Kurulu Değişikliği</td><td class="ok">correct</td></tr><tr><td><code>counterparty</code></td><td>null</td><td>null</td><td class="ok">correctly null</td></tr><tr><td><code>amount</code></td><td>null</td><td>12858.12</td><td class="warn">invented</td></tr><tr><td><code>effective_date</code></td><td>2025-04-07</td><td>2025-04-07</td><td class="ok">correct</td></tr></tbody></table></div></div></div></section><section class="ex"><h3><code>cargo_notice-00-distractors</code> · gemini-3.5-flash-lite</h3><p>Every field right despite four distractor lines.</p><div class="cols"><div><div class="lbl">Document (synthetic)</div><pre>KARGO GÖNDERİ BİLDİRİMİ
+*** SENTETİK ÖRNEK BELGE - gerçek değildir / SYNTHETIC TEST DOCUMENT ***
+Referans No: 1382401794387867
+Önceki Dönem Toplamı: 39.316,16 TL
+Kargo Firması: Sentez Taşımacılık
+Takip No: 614062894885
+Müşteri Temsilcisi: Ilgın Kaya
+Gönderici: Sarıdereli İnşaat Ltd. Şti.
+Alıcı: Mehmet Erdoğdu
+Teslimat Adresi: Atatürk Cad. No:118, Bodrum, Muğla
+Gönderi Tarihi: 18.01.2025
+Ağırlık: 26,0 kg
+Yazdırma Tarihi: 30.04.2025
+Parça Sayısı: 3
+Durum: Dağıtımda</pre></div><div><div class="lbl">Extracted JSON</div><pre>{
+  &quot;carrier&quot;: &quot;Sentez Taşımacılık&quot;,
+  &quot;tracking_no&quot;: &quot;614062894885&quot;,
+  &quot;sender_name&quot;: &quot;Sarıdereli İnşaat Ltd. Şti.&quot;,
+  &quot;receiver_name&quot;: &quot;Mehmet Erdoğdu&quot;,
+  &quot;receiver_city&quot;: &quot;Muğla&quot;,
+  &quot;ship_date&quot;: &quot;2025-01-18&quot;,
+  &quot;estimated_delivery&quot;: null,
+  &quot;weight_kg&quot;: 26.0,
+  &quot;pieces&quot;: 3,
+  &quot;cod_amount&quot;: null,
+  &quot;status&quot;: &quot;Dağıtımda&quot;
+}</pre></div><div><div class="lbl">Scored against the truth</div><div class="wrap"><table class="checks"><thead><tr><th>field</th><th>truth</th><th>extracted</th><th></th></tr></thead><tbody><tr><td><code>carrier</code></td><td>Sentez Taşımacılık</td><td>Sentez Taşımacılık</td><td class="ok">correct</td></tr><tr><td><code>tracking_no</code></td><td>614062894885</td><td>614062894885</td><td class="ok">correct</td></tr><tr><td><code>sender_name</code></td><td>Sarıdereli İnşaat Ltd. Şti.</td><td>Sarıdereli İnşaat Ltd. Şti.</td><td class="ok">correct</td></tr><tr><td><code>receiver_name</code></td><td>Mehmet Erdoğdu</td><td>Mehmet Erdoğdu</td><td class="ok">correct</td></tr><tr><td><code>receiver_city</code></td><td>Muğla</td><td>Muğla</td><td class="ok">correct</td></tr><tr><td><code>ship_date</code></td><td>2025-01-18</td><td>2025-01-18</td><td class="ok">correct</td></tr><tr><td><code>estimated_delivery</code></td><td>null</td><td>null</td><td class="ok">correctly null</td></tr><tr><td><code>weight_kg</code></td><td>26</td><td>26.0</td><td class="ok">correct</td></tr><tr><td><code>pieces</code></td><td>3</td><td>3</td><td class="ok">correct</td></tr><tr><td><code>cod_amount</code></td><td>null</td><td>null</td><td class="ok">correctly null</td></tr><tr><td><code>status</code></td><td>Dağıtımda</td><td>Dağıtımda</td><td class="ok">correct</td></tr></tbody></table></div></div></div></section>
+</main></body></html>

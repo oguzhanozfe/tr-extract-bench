@@ -1,5 +1,28 @@
 # tr-extract-bench
 
+Measures how well LLMs extract structured JSON from Turkish business documents, using
+synthetic documents with exact ground truth.
+
+## Try it
+
+**Leaderboard and worked examples: https://oguzhanozfe.github.io/tr-extract-bench/**
+
+[![Leaderboard page](docs/screenshot.png)](https://oguzhanozfe.github.io/tr-extract-bench/)
+
+```bash
+git clone https://github.com/oguzhanozfe/tr-extract-bench && cd tr-extract-bench
+python -m trbench demo        # Python 3.10+, no installs, no API key
+```
+
+`demo` generates four synthetic documents, extracts their fields, scores each one and then
+rebuilds the leaderboard from the committed outputs. It picks a model by itself: an
+API key in your environment (`GEMINI_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`),
+otherwise a local Ollama chat model, otherwise a replay of the recorded `qwen3.5:4b` outputs,
+which it labels `mode: replay`.
+
+To use a real model: start Ollama with any chat model (`ollama pull qwen3.5:9b`) or export
+one of the keys above, then run `python -m trbench demo` again. `--mode replay` forces replay.
+
 A small, reproducible benchmark for pulling structured JSON out of Turkish business
 documents with LLMs: e-fatura style invoices, bank statement excerpts, KAP-style
 company disclosures and cargo notices. Every document is synthetic and comes with exact
