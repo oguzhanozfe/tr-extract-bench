@@ -13,7 +13,8 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from . import ids
 
-VARIANTS = ["clean", "ocr", "ascii", "mixed", "reordered"]
+VARIANTS = ["clean", "ocr", "ascii", "mixed", "reordered", "ocr_values", "distractors"]
+HARD_VARIANTS = ["ocr_values", "distractors"]  # added after the first tier saturated
 DOC_TYPES = ["invoice", "bank_statement", "kap_disclosure", "cargo_notice"]
 MARKER = "*** SENTETİK ÖRNEK BELGE - gerçek değildir / SYNTHETIC TEST DOCUMENT ***"
 
@@ -383,8 +384,37 @@ def ocr(text, rng, rate=0.12):
     return "".join(out)
 
 
+VALUE_OCR = {"0": "O", "1": "l", "5": "S", "8": "B", "2": "Z"}
+
+
+def ocr_value(text, rng, rate=0.1):
+    """OCR that reaches values: digit -> lookalike letter (1.2S4,56). A letter inside a number, ID or date
+    is always an error, so the truth stays recoverable. Names are left alone: their spelling is invented."""
+    out = []
+    for ch in text:
+        r = rng.random()
+        if ch in VALUE_OCR and r < rate:
+            out.append(VALUE_OCR[ch])
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def distractors(rng):
+    """Plausible, clearly labelled lines that are not schema fields: extra dates, amounts, an IBAN, a person."""
+    lines = [[("t", "Yazdırma Tarihi: "), ("v", fmt_date(rand_date(rng), 0))],
+             [("t", "Referans No: "), ("v", str(rng.randint(10 ** 15, 10 ** 16 - 1)))],
+             [("t", "Önceki Dönem Toplamı: "), ("v", fmt_money(money(rng, 100, 90000), 0))],
+             [("t", "Müşteri Temsilcisi: "), ("v", person(rng))],
+             [("t", "Eski IBAN (kullanılmamaktadır): "), ("v", ids.group4(ids.make_iban(rng, "90009")))]]
+    return rng.sample(lines, 4)
+
+
 def render(doc: Doc, variant: str, rng) -> str:
     blocks = list(doc.blocks)
+    if variant == "distractors":
+        for line in distractors(rng):
+            blocks.insert(rng.randint(1, len(blocks)), (False, [line]))
     if variant == "reordered":
         slots = [i for i, (movable, _) in enumerate(blocks) if movable]
         moved = [blocks[i] for i in slots]
@@ -399,11 +429,11 @@ def render(doc: Doc, variant: str, rng) -> str:
                 if kind == "label":
                     tr, en = LABELS[x]
                     text = rng.choice([en, en, f"{tr} / {en}"]) if variant == "mixed" else tr
-                    parts.append(ocr(text, rng) if variant == "ocr" else text)
+                    parts.append(ocr(text, rng) if variant in ("ocr", "ocr_values") else text)
                 elif kind == "t":
-                    parts.append(ocr(x, rng) if variant == "ocr" else x)
+                    parts.append(ocr(x, rng) if variant in ("ocr", "ocr_values") else x)
                 else:
-                    parts.append(x)
+                    parts.append(ocr_value(x, rng) if variant == "ocr_values" else x)
             lines.append("".join(parts))
     text = "\n".join(lines)
     return text.translate(ASCII_MAP) if variant == "ascii" else text

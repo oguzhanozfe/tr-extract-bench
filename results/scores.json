@@ -2,34 +2,34 @@
   "gemini-3.1-flash-lite": {
     "by_doc_type": {
       "bank_statement": {
-        "f1": 1.0,
+        "f1": 0.9924812030075187,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9924812030075187,
+        "recall": 0.9924812030075187
       },
       "cargo_notice": {
-        "f1": 1.0,
+        "f1": 0.9962894248608535,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9962894248608535,
+        "recall": 0.9962894248608535
       },
       "invoice": {
-        "f1": 1.0,
+        "f1": 0.9885714285714285,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9885714285714285,
+        "recall": 0.9885714285714285
       },
       "kap_disclosure": {
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
+        "n": 56,
         "precision": 1.0,
         "recall": 1.0
       }
@@ -39,7 +39,7 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 4,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       },
@@ -47,7 +47,15 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 4,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "distractors": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       },
@@ -55,7 +63,7 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 4,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       },
@@ -63,63 +71,71 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 4,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 0.9528619528619529,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9528619528619529,
+        "recall": 0.9528619528619529
       },
       "reordered": {
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 4,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       }
     },
     "model": "gemini-3.1-flash-lite",
     "overall": {
-      "f1": 1.0,
+      "f1": 0.9932659932659933,
       "halluc_rate": 0.0,
       "json_valid": 1.0,
-      "n": 20,
-      "precision": 1.0,
-      "recall": 1.0
+      "n": 224,
+      "precision": 0.9932659932659933,
+      "recall": 0.9932659932659933
     },
     "settings": "temperature=0, thinkingLevel=low"
   },
   "gemini-3.5-flash-lite": {
     "by_doc_type": {
       "bank_statement": {
-        "f1": 1.0,
+        "f1": 0.9915333960489182,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.992467043314501,
+        "recall": 0.9906015037593985
       },
       "cargo_notice": {
-        "f1": 1.0,
+        "f1": 0.9934883720930232,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.996268656716418,
+        "recall": 0.9907235621521335
       },
       "invoice": {
-        "f1": 1.0,
+        "f1": 0.9828571428571429,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 20,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9828571428571429,
+        "recall": 0.9828571428571429
       },
       "kap_disclosure": {
-        "f1": 1.0,
+        "f1": 0.9967532467532467,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 5,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9967532467532467,
+        "recall": 0.9967532467532467
       }
     },
     "by_variant": {
@@ -127,7 +143,7 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 7,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       },
@@ -135,11 +151,65 @@
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 8,
+        "n": 32,
         "precision": 1.0,
         "recall": 1.0
       },
+      "distractors": {
+        "f1": 0.9966329966329966,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9966329966329966,
+        "recall": 0.9966329966329966
+      },
       "mixed": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 0.9322033898305084,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9385665529010239,
+        "recall": 0.9259259259259259
+      },
+      "reordered": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "model": "gemini-3.5-flash-lite",
+    "overall": {
+      "f1": 0.9898892633606163,
+      "halluc_rate": 0.0,
+      "json_valid": 1.0,
+      "n": 224,
+      "precision": 0.9908433734939759,
+      "recall": 0.9889369889369889
+    },
+    "settings": "temperature=0, thinkingLevel=low"
+  },
+  "gemma-4-31b-it": {
+    "by_doc_type": {
+      "bank_statement": {
         "f1": 1.0,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
@@ -147,79 +217,49 @@
         "precision": 1.0,
         "recall": 1.0
       },
-      "ocr": {
-        "f1": 1.0,
-        "halluc_rate": 0.0,
-        "json_valid": 1.0,
-        "n": 7,
-        "precision": 1.0,
-        "recall": 1.0
-      },
-      "reordered": {
-        "f1": 1.0,
-        "halluc_rate": 0.0,
-        "json_valid": 1.0,
-        "n": 7,
-        "precision": 1.0,
-        "recall": 1.0
-      }
-    },
-    "model": "gemini-3.5-flash-lite",
-    "overall": {
-      "f1": 1.0,
-      "halluc_rate": 0.0,
-      "json_valid": 1.0,
-      "n": 35,
-      "precision": 1.0,
-      "recall": 1.0
-    },
-    "settings": "temperature=0, thinkingLevel=low"
-  },
-  "gemma-4-31b-it": {
-    "by_doc_type": {
-      "bank_statement": {
-        "f1": 0.0,
-        "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
-      },
       "cargo_notice": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
       },
       "invoice": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
       },
       "kap_disclosure": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 5,
+        "precision": 1.0,
+        "recall": 1.0
       }
     },
     "by_variant": {
       "ascii": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
       },
       "clean": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "distractors": {
         "f1": 0.0,
         "halluc_rate": 0.0,
         "json_valid": 0.0,
@@ -228,74 +268,186 @@
         "recall": 0.0
       },
       "mixed": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
       },
       "ocr": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "ocr_values": {
+        "f1": 1.0,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 1,
+        "precision": 1.0,
+        "recall": 1.0
       },
       "reordered": {
-        "f1": 0.0,
+        "f1": 1.0,
         "halluc_rate": 0.0,
-        "json_valid": 0.0,
-        "n": 0,
-        "precision": 0.0,
-        "recall": 0.0
+        "json_valid": 1.0,
+        "n": 4,
+        "precision": 1.0,
+        "recall": 1.0
       }
     },
     "model": "gemma-4-31b-it",
     "overall": {
-      "f1": 0.0,
+      "f1": 1.0,
       "halluc_rate": 0.0,
-      "json_valid": 0.0,
-      "n": 0,
-      "precision": 0.0,
-      "recall": 0.0
+      "json_valid": 1.0,
+      "n": 21,
+      "precision": 1.0,
+      "recall": 1.0
     },
     "settings": "temperature=0, thought parts dropped"
+  },
+  "ollama-qwen3.5-4b": {
+    "by_doc_type": {
+      "bank_statement": {
+        "f1": 0.8508180943214629,
+        "halluc_rate": 0.0,
+        "json_valid": 0.9642857142857143,
+        "n": 56,
+        "precision": 0.8717948717948718,
+        "recall": 0.8308270676691729
+      },
+      "cargo_notice": {
+        "f1": 0.9944237918215613,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9962756052141527,
+        "recall": 0.9925788497217068
+      },
+      "invoice": {
+        "f1": 0.9828571428571429,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9828571428571429,
+        "recall": 0.9828571428571429
+      },
+      "kap_disclosure": {
+        "f1": 0.9739413680781759,
+        "halluc_rate": 0.0032679738562091504,
+        "json_valid": 1.0,
+        "n": 56,
+        "precision": 0.9771241830065359,
+        "recall": 0.9707792207792207
+      }
+    },
+    "by_variant": {
+      "ascii": {
+        "f1": 0.9544688026981449,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.956081081081081,
+        "recall": 0.9528619528619529
+      },
+      "clean": {
+        "f1": 0.9797979797979798,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9797979797979798,
+        "recall": 0.9797979797979798
+      },
+      "distractors": {
+        "f1": 0.9680672268907563,
+        "halluc_rate": 0.003355704697986577,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9664429530201343,
+        "recall": 0.9696969696969697
+      },
+      "mixed": {
+        "f1": 0.9696969696969697,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.9696969696969697,
+        "recall": 0.9696969696969697
+      },
+      "ocr": {
+        "f1": 0.9554794520547946,
+        "halluc_rate": 0.0,
+        "json_valid": 0.96875,
+        "n": 32,
+        "precision": 0.9721254355400697,
+        "recall": 0.9393939393939394
+      },
+      "ocr_values": {
+        "f1": 0.8788927335640139,
+        "halluc_rate": 0.0,
+        "json_valid": 0.96875,
+        "n": 32,
+        "precision": 0.9039145907473309,
+        "recall": 0.8552188552188552
+      },
+      "reordered": {
+        "f1": 0.9509306260575295,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 0.95578231292517,
+        "recall": 0.9461279461279462
+      }
+    },
+    "model": "qwen3.5:4b",
+    "overall": {
+      "f1": 0.9513199321869703,
+      "halluc_rate": 0.0004878048780487805,
+      "json_valid": 0.9910714285714286,
+      "n": 224,
+      "precision": 0.9580487804878048,
+      "recall": 0.9446849446849447
+    },
+    "settings": "temperature=0, think=false, digest=2a654d98e6fb"
   },
   "ollama-qwen3.5-9b": {
     "by_doc_type": {
       "bank_statement": {
-        "f1": 0.9973684210526316,
+        "f1": 0.9819563152896487,
         "halluc_rate": 0.0,
-        "json_valid": 1.0,
-        "n": 40,
-        "precision": 0.9973684210526316,
-        "recall": 0.9973684210526316
+        "json_valid": 0.9821428571428571,
+        "n": 56,
+        "precision": 0.9923224568138196,
+        "recall": 0.9718045112781954
       },
       "cargo_notice": {
-        "f1": 1.0,
+        "f1": 0.9935004642525535,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 40,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9944237918215614,
+        "recall": 0.9925788497217068
       },
       "invoice": {
-        "f1": 1.0,
+        "f1": 0.9813753581661891,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 40,
-        "precision": 1.0,
-        "recall": 1.0
+        "n": 56,
+        "precision": 0.9841954022988506,
+        "recall": 0.9785714285714285
       },
       "kap_disclosure": {
-        "f1": 0.9885057471264368,
+        "f1": 0.9786535303776683,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
-        "n": 40,
-        "precision": 1.0,
-        "recall": 0.9772727272727273
+        "n": 56,
+        "precision": 0.9900332225913622,
+        "recall": 0.9675324675324676
       }
     },
     "by_variant": {
@@ -308,6 +460,14 @@
         "recall": 0.9966329966329966
       },
       "clean": {
+        "f1": 0.9983136593591906,
+        "halluc_rate": 0.0,
+        "json_valid": 1.0,
+        "n": 32,
+        "precision": 1.0,
+        "recall": 0.9966329966329966
+      },
+      "distractors": {
         "f1": 0.9983136593591906,
         "halluc_rate": 0.0,
         "json_valid": 1.0,
@@ -330,6 +490,14 @@
         "n": 32,
         "precision": 1.0,
         "recall": 0.9966329966329966
+      },
+      "ocr_values": {
+        "f1": 0.901213171577123,
+        "halluc_rate": 0.0,
+        "json_valid": 0.96875,
+        "n": 32,
+        "precision": 0.9285714285714286,
+        "recall": 0.8754208754208754
       },
       "reordered": {
         "f1": 0.9949409780775715,
@@ -342,12 +510,12 @@
     },
     "model": "qwen3.5:9b",
     "overall": {
-      "f1": 0.9976391231028666,
+      "f1": 0.9842805320435308,
       "halluc_rate": 0.0,
-      "json_valid": 1.0,
-      "n": 160,
-      "precision": 0.9993243243243243,
-      "recall": 0.9959595959595959
+      "json_valid": 0.9955357142857143,
+      "n": 224,
+      "precision": 0.9897859922178989,
+      "recall": 0.9788359788359788
     },
     "settings": "temperature=0, think=false, digest=56671c2ab938"
   }

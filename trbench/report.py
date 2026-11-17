@@ -55,8 +55,8 @@ def _table(lanes, order, total, pick):
 def markdown(lanes, total, sample_total):
     order = sorted(lanes, key=lambda k: -aggregate(lanes[k]["items"])["f1"])
     out = [f"### Shared sample: every lane on the same {sample_total} tasks", "",
-           "Base document 00 of each type in all five variants. Cloud free tiers allow about 20 requests "
-           "per model per day, so this is the like-for-like comparison.", ""]
+           "Base document 00 of each type in every variant. Every lane ran this sample first, so it is the "
+           "like-for-like comparison when a lane could not finish the full set.", ""]
     out += _table(lanes, sorted(lanes, key=lambda k: -aggregate([i for i in lanes[k]["items"] if i["sample"]])["f1"]),
                   sample_total, lambda i: i["sample"])
     out += ["", "### All tasks a lane completed", ""]
